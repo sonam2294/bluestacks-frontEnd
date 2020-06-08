@@ -1,0 +1,17 @@
+<div id="dashboard-popup">
+  <div id="popup">
+    <div id="bitmap" [style.backgroundImage]="'url('+ campaign?.image_url +')'"></div>
+    <p id="title">{{campaign?.name}}</p>
+    <p id="loc">{{campaign?.region}}</p>
+    <p id="pricing">Pricing</p>
+    <div id="listPnl">
+      <ng-container *ngFor="let pricing of pricings;">
+        <p class="leftVal">{{pricing[0]}}</p>
+        <p class="rightVal">{{pricing[1] | currency: USD}}</p>
+      </ng-container>
+    </div>
+    <div id="button">
+      <button mat-button (click)="closeDialog()">Close</button>
+    </div>
+  </div>
+</div>

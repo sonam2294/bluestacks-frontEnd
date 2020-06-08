@@ -1,0 +1,83 @@
+<div id="dashboard">
+  <div id="header">
+    <div id="logo"></div>
+  </div>
+  <div id="main-container">
+    <p id="heading" class="roboto-normal" i18n="@@header">Manage Campaigns</p>
+    <div id="container">
+      <mat-tab-group>
+        <mat-tab label="{{campaignTypes[0]}}">
+          <ng-template matTabContent>
+            <ng-container [ngTemplateOutlet]="campRow" [ngTemplateOutletContext]="{campaigns: upcoming_campaigns }">
+            </ng-container>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="{{campaignTypes[1]}}">
+          <ng-template matTabContent>
+            <ng-container [ngTemplateOutlet]="campRow" [ngTemplateOutletContext]="{campaigns: live_campaigns }"></ng-container>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="{{campaignTypes[2]}}">
+          <ng-template matTabContent>
+            <ng-container [ngTemplateOutlet]="campRow" [ngTemplateOutletContext]="{campaigns: past_campaigns }"></ng-container>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>
+
+<ng-template #campRow let-campaigns="campaigns">
+  <div id="data-container">
+    <div id="dataHdr">
+      <p class="first-grp" i18n="@@date">DATE</p>
+      <p class="second-grp" i18n="@@campaigns">CAMPAIGNS</p>
+      <p class="third-grp" i18n="@@view">VIEW</p>
+      <p class="fourth-grp" i18n="@@actions">ACTIONS</p>
+    </div>
+    <div class="rows-pnl">
+      <div class="row" *ngFor="let campaign of campaigns;let cIdx = index;">
+        <div class="first-grp">
+          <div>
+            <p id="date">{{campaign.createdOn | date: 'MMM yyyy, dd'}}</p>
+            <p id="label" *ngIf="campaign.type == gConst.CampaignType.past" i18n="@@past">{{-campaign.timeDiff}} days ago</p>
+            <p id="label" *ngIf="campaign.type == gConst.CampaignType.upcoming" i18n="@@upcoming">{{campaign.timeDiff}} days ahead</p>
+          </div>
+        </div>
+        <div class="second-grp">
+          <div id="img-pnl" [style.backgroundImage]="'url('+ campaign.image_url +')'"></div>
+          <div id="desc">
+            <p id="title" i18n="@@campName">{{campaign.name}}</p>
+            <p id="loc" class="roboto-normal" i18n="@@region">{{campaign.region}}</p>
+          </div>
+        </div>
+        <div class="third-grp">
+          <div class="float-left" (click)="openDialog(campaign)">
+            <img src="assets/Row/Group 4/Price.png">
+            <p class="roboto-small">Visit Pricing</p>
+          </div>
+        </div>
+        <div class="fourth-grp">
+          <a class="float-left grp3" [href]="campaign.csv">
+            <img src="assets/Row/Group 3/file.png">
+            <p class="roboto-small">CSV</p>
+          </a>
+          <a class="float-left grp2" [href]="campaign.report">
+            <img src="assets/Row/Group 2/statistics-report.png">
+            <p class="roboto-small">Report</p>
+          </a>
+          <div class="float-left grp">
+            <img src="assets/Row/Group/calendar.png">
+            <p class="roboto-small">Schedule Again</p>
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker" [(ngModel)]="campaign.createdOn" (ngModelChange)="updateCampaign(campaign.type, cIdx)">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+  </div>
+  </div>
+</ng-template> 
+<!-- <app-dashboard-popup></app-dashboard-popup> -->
